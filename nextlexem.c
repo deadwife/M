@@ -1,3 +1,27 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
+#include "head/my_funcs.h"
+#include "head/my_tps.h"
+#define CLS system("clear");
+#define BUFSIZE 8096
+
+
+
+
+char skip(char * c)
+{
+     do
+          read(0, c, 1);
+     while (*c == ' ');
+     return *c;
+}
+
+
+///////////////////////////////////////////////////////////
+
 Lex nextlex(char * cur_str)
 {
      char c;
