@@ -101,7 +101,9 @@ Tree * head(Lex * code, char * cur_str)
           Crop0->code = *code;
           if ((*code = nextlex(cur_str)) == _arg)
           {
-               Crop0->args = cur_str;
+
+               Crop0->args = (char *) calloc (BUFSIZE,sizeof(char));
+               *(Crop0->args) = *cur_str;
                Crop0->left = Crop;
                Crop0->right = mult(code, cur_str);
                Crop = Crop0;
@@ -131,7 +133,8 @@ Tree * mult(Lex * code, char * cur_str)
      if((*code = nextlex(cur_str)) == _arg)
      {
           Crop->code = *code;
-          Crop->args = cur_str;
+          Crop->args = (char *) calloc (BUFSIZE,sizeof(char));
+          *(Crop->args) = *cur_str;
           *code = _zero;
      }
      else
