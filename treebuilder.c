@@ -9,13 +9,44 @@
 #include "head/my_funcs.h"
 #include "head/my_tps.h"
 #define S sleep(999);
-#define BUFSIZE 8096
+#define BUFSIZE 512
 
-Tree * exp0(char * cur_str)
+
+/////////////////////////////////////////////////////////////////////
+
+
+char ** string_demolisherXXX(char * args, char ** demolished_args)
+{
+     char c;
+     int i = 0, j = 0;
+     do
+     {
+          do
+          {
+               c = args[i];
+               demolished_args[j][i] = c;
+               i++;
+          }
+          while ((c != ' ') && (c != '\0'));
+          demolished_args[j][i - 1] = '\0';
+          j++;
+     }
+     while (c != '\0');
+     return (char **) calloc (BUFSIZE * BUFSIZE, sizeof(char));
+}
+
+
+/////////////////////////////////////////////////////////////////////
+
+
+
+
+
+Tree * exp0(char * cur_str, char ** demolished_args)
 {
      Lex code;
      Tree * Crop = NULL,* Crop0 = NULL;
-     Crop = expr(&code, cur_str);
+     Crop = expr(&code, cur_str, demolished_args);
      if (code == _zero)
           code = nextlex(cur_str);
      while (code == _background)
@@ -24,7 +55,7 @@ Tree * exp0(char * cur_str)
           Crop0->code = code;
           Crop0->args = NULL;
           Crop0->left = Crop;
-          Crop0->right = expr(&code, cur_str);
+          Crop0->right = expr(&code, cur_str, demolished_args);
           Crop = Crop0;
           if (code == _zero)
                code = nextlex(cur_str);
@@ -41,10 +72,10 @@ Tree * exp0(char * cur_str)
 /////////////////////////////////////////////////////////////////////
 
 
-Tree * expr(Lex * code, char * cur_str)
+Tree * expr(Lex * code, char * cur_str, char ** demolished_args)
 {
      Tree * Crop = NULL,* Crop0 = NULL;
-     Crop = item(code, cur_str);
+     Crop = item(code, cur_str, demolished_args);
      if (*code == _zero)
           *code = nextlex(cur_str);
      while ((*code == _and) || (*code == _or))
@@ -53,7 +84,7 @@ Tree * expr(Lex * code, char * cur_str)
           Crop0->code = *code;
           Crop0->args = NULL;
           Crop0->left = Crop;
-          Crop0->right = item(code, cur_str);
+          Crop0->right = item(code, cur_str, demolished_args);
           Crop = Crop0;
           if (*code == _zero)
                *code = nextlex(cur_str);
@@ -65,10 +96,10 @@ Tree * expr(Lex * code, char * cur_str)
 /////////////////////////////////////////////////////////////////////
 
 
-Tree * item(Lex * code, char * cur_str)
+Tree * item(Lex * code, char * cur_str, char ** demolished_args)
 {
      Tree * Crop = NULL,* Crop0 = NULL;
-     Crop = head(code, cur_str);
+     Crop = head(code, cur_str, demolished_args);
      if (*code == _zero)
           *code = nextlex(cur_str);
      while (*code == _pipe)
@@ -77,7 +108,7 @@ Tree * item(Lex * code, char * cur_str)
           Crop0->code = *code;
           Crop0->args = NULL;
           Crop0->left = Crop;
-          Crop0->right = head(code, cur_str);
+          Crop0->right = head(code, cur_str, demolished_args);
           Crop = Crop0;
           if (*code == _zero)
                *code = nextlex(cur_str);
@@ -89,10 +120,10 @@ Tree * item(Lex * code, char * cur_str)
 /////////////////////////////////////////////////////////////////////
 
 
-Tree * head(Lex * code, char * cur_str)
+Tree * head(Lex * code, char * cur_str, char ** demolished_args)
 {
      Tree * Crop = NULL,* Crop0 = NULL;
-     Crop = mult(code, cur_str);
+     Crop = mult(code, cur_str, demolished_args);
      if (*code == _zero)
           *code = nextlex(cur_str);
      while (*code == _redirect)
@@ -102,10 +133,10 @@ Tree * head(Lex * code, char * cur_str)
           if ((*code = nextlex(cur_str)) == _arg)
           {
 
-               Crop0->args = (char *) calloc (BUFSIZE,sizeof(char));
-               *(Crop0->args) = *cur_str;
+               Crop0->args = string_demolisherXXX(cur_str, demolished_args);
+               **(Crop0->args) = **demolished_args;
                Crop0->left = Crop;
-               Crop0->right = mult(code, cur_str);
+               Crop0->right = mult(code, cur_str, demolished_args);
                Crop = Crop0;
                if (*code == _zero)
                     *code = nextlex(cur_str);
@@ -124,7 +155,7 @@ Tree * head(Lex * code, char * cur_str)
 /////////////////////////////////////////////////////////////////////
 
 
-Tree * mult(Lex * code, char * cur_str)
+Tree * mult(Lex * code, char * cur_str, char ** demolished_args)
 {
      Tree * Crop = NULL;
      Crop = (Tree *) calloc (1, sizeof(Tree));
@@ -133,8 +164,8 @@ Tree * mult(Lex * code, char * cur_str)
      if((*code = nextlex(cur_str)) == _arg)
      {
           Crop->code = *code;
-          Crop->args = (char *) calloc (BUFSIZE,sizeof(char));
-          *(Crop->args) = *cur_str;
+          Crop->args = string_demolisherXXX(cur_str, demolished_args);
+          **(Crop->args) = **demolished_args;
           *code = _zero;
      }
      else
