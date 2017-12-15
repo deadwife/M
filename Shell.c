@@ -13,7 +13,7 @@
 
 int main()
 {
-     Tree * Tree;
+     Tree * Tree = NULL;
      char cur_str[BUFSIZE];
      Lex code;
      int fd, fd1;
@@ -22,7 +22,6 @@ Begin:
      fd1 = dup(2);
      dup2(fd ,2);
      write(1,">: ", 3);
-     Tree = NULL;
      //
      Tree = exp0(&code, cur_str); //Grow a Tree from a Crop
 
