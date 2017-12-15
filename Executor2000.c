@@ -34,26 +34,38 @@ int executor2000(Tree * Tree)
                     else
                          wait(NULL);
                }
+               else
+                    success = -1;
                dup2(fd, 0);
                close(fd);
                if (Tree->right != NULL)
                     success = executor2000(Tree->right);
+               else
+                    success = -1;
                break;
           }
      case _and:
           {
                if (Tree->left != NULL)
                     success = executor2000(Tree->left);
+               else
+                    return -1;
                if ((Tree->right != NULL) && success)
                     success = executor2000(Tree->right);
+               else
+                    return -1;
                break;
           }
      case _or:
           {
                if (Tree->left != NULL)
                     success = executor2000(Tree->left);
+               else
+                    return -1;
                if ((Tree->right != NULL) && (success == -1))
                     success = executor2000(Tree->right);
+               else
+                    return -1;
                break;
           }
      case _pipe:
@@ -65,6 +77,8 @@ int executor2000(Tree * Tree)
                dup2(fd, 1);
                if (Tree->left != NULL)
                     success = executor2000(Tree->left); //left > t
+               else
+                    success = -1;
                dup2(fd1, 1);
                close(fd1);
                fd1 = dup(0);
@@ -95,22 +109,14 @@ int executor2000(Tree * Tree)
                     dup2(fd, 1);
                }
                else
-               {
-                    error("expected filename, but sh#t found - sleeping...\n");
-                    S
-               }
+                    return -1;
                if (Tree->left != NULL)
-               {
                     success = executor2000(Tree->left);
-                    dup2(fd1,1);
-                    close(fd);
-                    close(fd1);
-               }
                else
-               {
-                    error("expected arg, but sh#t found - sleeping...\n");
-                    S
-               }
+                    success = -1;
+               dup2(fd1,1);
+               close(fd);
+               close(fd1);
                break;
           }
      case _redirectRR:
@@ -125,22 +131,14 @@ int executor2000(Tree * Tree)
                     dup2(fd, 1);
                }
                else
-               {
-                    error("expected filename, but sh#t found - sleeping...\n");
-                    S
-               }
+                    return -1;
                if (Tree->left != NULL)
-               {
                     success = executor2000(Tree->left);
-                    dup2(fd1,1);
-                    close(fd);
-                    close(fd1);
-               }
                else
-               {
-                    error("expected arg, but sh#t found - sleeping...\n");
-                    S
-               }
+                    success = -1;
+               dup2(fd1,1);
+               close(fd);
+               close(fd1);
                break;
           }
      case _redirectL:
@@ -155,22 +153,14 @@ int executor2000(Tree * Tree)
                     dup2(fd, 0);
                }
                else
-               {
-                    error("expected filename, but sh#t found - sleeping...\n");
-                    S
-               }
+                    return -1;
                if (Tree->left != NULL)
-               {
                     success = executor2000(Tree->left);
-                    dup2(fd1,0);
-                    close(fd);
-                    close(fd1);
-               }
                else
-               {
-                    error("expected arg, but sh#t found - sleeping...\n");
-                    S
-               }
+                    success = -1;
+               dup2(fd1,0);
+               close(fd);
+               close(fd1);
                break;
           }
           case _arg:
@@ -192,7 +182,7 @@ int executor2000(Tree * Tree)
                     {
                          argformer(Arguments, Tree->args);
                          success = execv("Copy.exe", Arguments);
-                         error("com0 err...");
+                         printf("command error in %s\n", Tree->args->arg1);
                          write(fd[1], &success, 1);
                          raise(SIGKILL);
                     }
@@ -214,7 +204,7 @@ int executor2000(Tree * Tree)
                          {
                               argformer(Arguments, Tree->args);
                               success = execv("Wc.exe", Arguments);
-                              error("com0 err...");
+                              printf("command error in %s\n", Tree->args->arg1);
                               write(fd[1], &success, 1);
                               raise(SIGKILL);
                          }
@@ -236,7 +226,7 @@ int executor2000(Tree * Tree)
                               {
                                    argformer(Arguments, Tree->args);
                                    success = execv("Cat.exe", Arguments);
-                                   error("com0 err...");
+                                   printf("command error in %s\n", Tree->args->arg1);
                                    write(fd[1], &success, 1);
                                    raise(SIGKILL);
                               }
@@ -254,7 +244,7 @@ int executor2000(Tree * Tree)
                {
                     argformer(Arguments, Tree->args);
                     success = execvp(Tree->args->arg1, Arguments);
-                    error("command err...killing");
+                    printf("command error in %s\n", Tree->args->arg1);
                     write(fd[1], &success, 1);
                     raise(SIGKILL);
                }
@@ -262,7 +252,7 @@ int executor2000(Tree * Tree)
           }
           default:
           {
-               error("unexpected Lex value...");
+               error("unexpected Lex value...\n");
                return -1;
           }
      }
