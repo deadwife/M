@@ -250,6 +250,10 @@ int executor2000(Tree * Tree)
                }
                break;
           }
+          case _zero:
+          {
+               return 1;         
+          }
           default:
           {
                error("unexpected Lex value...\n");
