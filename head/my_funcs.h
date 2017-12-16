@@ -10,7 +10,7 @@ void Rootplacer(arr * Root);
 arr * string_demolisherXXX(char * args);
 Lex nextlex(char * cur_str);
 
-Tree * exp0(Lex * code,char * cur_str);
+Tree * exp0(Lex * code, char * cur_str);
 Tree * expr(Lex * code, char * cur_str);
 Tree * item(Lex * code, char * cur_str);
 Tree * head(Lex * code, char * cur_str);
