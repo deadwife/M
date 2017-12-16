@@ -38,13 +38,11 @@ int main(int argc, char * argv[])
                }
            l_count++;
      }
-     write(1, &l_count, 1);
-     write(1, "    ", 4);
+     printf("%d   ", l_count);
      if (l_count != 0)
-          write(1, &w_count, 1);
+          printf("%d    ", w_count);
      else
-          write(1, "0", 1);
-     write(1, "    ", 4);
-     write(1, &s_count, 1);
+          printf("0    ");
+     printf("%d\n", s_count);
      return 0;
 }
