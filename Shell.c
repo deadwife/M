@@ -16,11 +16,7 @@ int main()
      Tree * Tree = NULL;
      char cur_str[BUFSIZE];
      Lex code;
-     int fd, fd1;
 Begin:
-     fd = open("err", O_RDWR | O_TRUNC);
-     fd1 = dup(2);
-     dup2(fd ,2);
      write(1,">: ", 3);
      //
      Tree = exp0(&code, cur_str); //Grow a Tree from a Crop
@@ -31,9 +27,6 @@ Begin:
      executor2000(Tree); //Do stuff
      //
      lumberjack3000(Tree); //Free a tree
-     dup2(fd1 ,2);
-     close(fd1);
-     close(fd);
 goto Begin;
      return 0;
 }
