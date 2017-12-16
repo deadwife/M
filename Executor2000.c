@@ -18,7 +18,7 @@ int executor2000(Tree * Tree)
      int success = 1;
      switch (Tree->code)
      {
-     case _background:
+     case _background:                                                     //     &
           {
                int fd;
                setpgrp();
@@ -44,7 +44,7 @@ int executor2000(Tree * Tree)
                     success = -1;
                break;
           }
-     case _and:
+     case _and:                                                            //     &&
           {
                if (Tree->left != NULL)
                     success = executor2000(Tree->left);
@@ -56,7 +56,7 @@ int executor2000(Tree * Tree)
                     return -1;
                break;
           }
-     case _or:
+     case _or:                                                             //      ||
           {
                if (Tree->left != NULL)
                     success = executor2000(Tree->left);
@@ -68,7 +68,7 @@ int executor2000(Tree * Tree)
                     return -1;
                break;
           }
-     case _pipe:
+     case _pipe:                                                            //      |
           {
                int fd, fd1;
                struct Tree * Root = Tree;
@@ -97,7 +97,7 @@ int executor2000(Tree * Tree)
                }
                break;
           }
-     case _redirectR:
+     case _redirectR:                                                      //      >
           {
                int fd, fd1;
                char * filename;
@@ -119,7 +119,7 @@ int executor2000(Tree * Tree)
                close(fd1);
                break;
           }
-     case _redirectRR:
+     case _redirectRR:                                                           //      >>
           {
                int fd, fd1;
                char * filename;
@@ -141,7 +141,7 @@ int executor2000(Tree * Tree)
                close(fd1);
                break;
           }
-     case _redirectL:
+     case _redirectL:                                                              //       <
           {
                int fd, fd1;
                char * filename;
@@ -163,7 +163,7 @@ int executor2000(Tree * Tree)
                close(fd1);
                break;
           }
-          case _arg:
+          case _arg:                                                                //      argument
           {
                char * Arguments[6];
                if (strcmp(Tree->args->arg1, "cp") == 0)
