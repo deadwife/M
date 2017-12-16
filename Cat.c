@@ -9,7 +9,7 @@ int main(int argc, char * argv[])
      char * filename = argv[1];
      int fd, reader;
      char c;
-     fd = open(filename, O_RDONLY);
+     fd = open(filename, O_RDONLY, 0666);
      if (fd == -1)
           error("file not found");
      while ((reader = read(fd, &c, 1)) > 0)
